@@ -40,7 +40,7 @@
 <div>
 <h1 class="h4 mb-1">CBHCC AHT (Overall)</h1>
 <div class="text-muted">Date: <span id="today"></span></div>
-<div class="text-muted mt-1">Source: <code>cbhccoverallAHT.csv</code></div>
+<div class="text-muted mt-1">Source: <code>cpcsAHT.csv</code></div>
 </div>
 </div>
  
@@ -64,9 +64,9 @@
 <h2 class="h5 mb-1">CBHCC AHT Interval</h2>
 <div class="text-muted">
               As of <span id="intervalAsOf">loading…</span> ET
-<span class="d-block small">(based on last commit time of <code>cbhcc.csv</code>)</span>
+<span class="d-block small">(based on last commit time of <code>cpcs.csv</code>)</span>
 </div>
-<div class="text-muted mt-1">Source: <code>cbhcc.csv</code></div>
+<div class="text-muted mt-1">Source: <code>cpcs.csv</code></div>
 </div>
 </div>
  
@@ -97,15 +97,15 @@
  
   <script>
     /************* SET THESE *************/
-    const OWNER = "gayleF-cgs";
-    const REPO  = "AHT-interval";
+    const OWNER = "cbandoy";
+    const REPO  = "CPCSAHTinterval";
     const BRANCH = "main";
     /************************************/
  
     const THRESHOLD = 490;
  
     // Overall table: highlight if 3rd column > 490
-    const OVERALL_CSV = "cbhccoverallAHT.csv";
+    const OVERALL_CSV = "cpcsAHT.csv";
     const OVERALL_COL_INDEX = 2; // 3rd column
  
     // Grand Total detection (Overall table only)
@@ -113,7 +113,7 @@
     const GRAND_TOTAL_COL_INDEX = 1; // column 2 (1-based) => index 1 (0-based)
  
     // Interval table: highlight if 5th column > 490
-    const INTERVAL_CSV = "cbhcc.csv";
+    const INTERVAL_CSV = "cpcs.csv";
     const INTERVAL_COL_INDEX = 4; // 5th column
  
     function toNumber(x) {
