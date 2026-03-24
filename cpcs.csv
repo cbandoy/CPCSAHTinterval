@@ -1,24 +1,24 @@
-﻿LOB,Supervisor,Name,Handled,AHT,ACW Ave,Hold Ave,TR% Ave
-CPCS,"Molina, Schubert Jr","Caldera, Ann Khrysta",2,327,5,1,50%
-CPCS,"Molina, Schubert Jr","Capillas, Renalyn",2,49,10,--,0%
-CPCS,"Molina, Schubert Jr","Gador, George II",2,340,10,2,0%
-CPCS,"Molina, Schubert Jr","Surles, Jinky",1,21,10,--,0%
-CPCS,"Navarra, Mark Debby","Baumbad, Joshua",1,243,10,--,0%
-CPCS,"Navarra, Mark Debby","Ciasico, Mary April Shaine",1,36,10,--,0%
-CPCS,"Navarra, Mark Debby","Jordan, Mary Beth",1,611,10,--,0%
-CPCS,"Navarra, Mark Debby","Judicpa, Judegin",1,36,10,--,0%
-CPCS,"Navarra, Mark Debby","Sanchez, Roderick",1,346,10,--,0%
-CPCS,"Navarra, Mark Debby","Tacadao, Janine Marie",2,182,10,--,0%
-CPCS,"Navarra, Mark Debby","Valencia, Jellie Joy",2,60,10,--,0%
-CPCS,"Sombero, April Marie","Camarino, Mark",1,817,10,--,0%
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
+﻿LOB,Tenure,Name2,Handled Calls ,AHT seconds,ACW.,Hold time.,Transfer rate%
+CPCS,"Molina, Schubert Jr","Caldera, Ann Khrysta",4,283,7,1,25.00%
+CPCS,"Molina, Schubert Jr","Capillas, Renalyn",6,142,10,--,0.00%
+CPCS,"Molina, Schubert Jr","Gador, George II",7,300,10,2,0.00%
+CPCS,"Molina, Schubert Jr","Galvez, Christian",5,399,10,--,0.00%
+CPCS,"Molina, Schubert Jr","Surles, Jinky",9,320,10,--,0.00%
+CPCS,"Molina, Schubert Jr","Taleon, Gerald",6,362,10,--,0.00%
+CPCS,"Navarra, Mark Debby","Balcena, Riesel Liberty Rose",7,275,10,2,0.00%
+CPCS,"Navarra, Mark Debby","Baumbad, Joshua",7,313,6,--,14.29%
+CPCS,"Navarra, Mark Debby","Ciasico, Mary April Shaine",8,173,10,--,0.00%
+CPCS,"Navarra, Mark Debby","Decolongon, Karl Jason",6,248,10,--,0.00%
+CPCS,"Navarra, Mark Debby","Jordan, Mary Beth",5,528,10,--,0.00%
+CPCS,"Navarra, Mark Debby","Judicpa, Judegin",4,259,10,--,0.00%
+CPCS,"Navarra, Mark Debby","Noblezada, Chriz Vincent",8,243,10,--,0.00%
+CPCS,"Navarra, Mark Debby","Pajotagana, Champhagne",5,527,8,--,20.00%
+CPCS,"Navarra, Mark Debby","Sanchez, Roderick",5,255,10,--,0.00%
+CPCS,"Navarra, Mark Debby","Tacadao, Janine Marie",4,350,10,--,0.00%
+CPCS,"Navarra, Mark Debby","Valencia, Jellie Joy",4,307,10,--,0.00%
+CPCS,"Sombero, April Marie","Alob, Rheshane Marie",4,905,10,91,0.00%
+CPCS,"Sombero, April Marie","Camarino, Mark",6,579,10,--,0.00%
+CPCS,"Sombero, April Marie","Fernandez, Eljohn",3,921,10,140,0.00%
+CPCS,"Sombero, April Marie","Macero, Reynan",5,587,10,--,0.00%
+CPCS,"Sombero, April Marie","Sirame, Kevin John",3,824,10,--,0.00%
+CPCS,"Sombero, April Marie","Zerrudo, Jeserelle Jason",3,806,10,--,0.00%
