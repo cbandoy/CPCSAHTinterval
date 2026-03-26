@@ -1,4 +1,4 @@
-﻿LOB,Supervisor,Name,Handled,AHT,ACW Ave,Hold Ave,TR% Ave
+﻿LOB,Supervisor,Name,AHT,Handled,ACW Ave,Hold Ave,TR% Ave
 CPCS,"Molina, Schubert Jr","Caldera, Ann Khrysta",212,5,10,1,0.00%
 CPCS,"Molina, Schubert Jr","Capillas, Renalyn",58,2,10,,0.00%
 CPCS,"Molina, Schubert Jr","Gador, George II",256,4,10,1,0.00%
@@ -9,5 +9,3 @@ CPCS,"Navarra, Mark Debby","Jordan, Mary Beth",1679,1,10,,0.00%
 CPCS,"Navarra, Mark Debby","Noblezada, Chriz Vincent",264,2,10,,0.00%
 CPCS,"Navarra, Mark Debby","Tacadao, Janine Marie",424,3,10,,0.00%
 CPCS,"Sombero, April Marie","Camarino, Mark",996,1,10,,0.00%
-,,,,,,,
-,,,,,,,
