@@ -1,16 +1,24 @@
-﻿LOB,Supervisor,Name,Handled,AHT,ACW Ave,Hold Ave,TR% Ave
-CPCS,"Molina, Schubert Jr","Caldera, Ann Khrysta",2,51,10,,0.00%
-CPCS,"Molina, Schubert Jr","Capillas, Renalyn",1,261,10,,0.00%
-CPCS,"Molina, Schubert Jr","Gador, George II",1,63,10,,0.00%
-CPCS,"Molina, Schubert Jr","Surles, Jinky",1,869,10,,0.00%
-CPCS,"Navarra, Mark Debby","Balcena, Riesel Liberty Rose",1,872,10,,0.00%
+﻿LOB,Supervisor,Name,AHT,Handled,ACW Ave,Hold Ave,TR% Ave
+CPCS,"Molina, Schubert Jr","Cabangal, Ariel",3,54,7,,0.00%
+CPCS,"Molina, Schubert Jr","Caldera, Ann Khrysta",6,171,10,1,0.00%
+CPCS,"Molina, Schubert Jr","Capillas, Renalyn",4,237,10,,0.00%
+CPCS,"Molina, Schubert Jr","Gador, George II",6,273,10,,0.00%
+CPCS,"Molina, Schubert Jr","Galvez, Christian",3,514,10,,0.00%
+CPCS,"Molina, Schubert Jr","Surles, Jinky",3,345,10,,0.00%
+CPCS,"Molina, Schubert Jr","Taleon, Gerald",5,332,10,,0.00%
+CPCS,"Navarra, Mark Debby","Balcena, Riesel Liberty Rose",4,421,10,,0.00%
 CPCS,"Navarra, Mark Debby","Baumbad, Joshua",3,398,3,,0.00%
-CPCS,"Navarra, Mark Debby","Ciasico, Mary April Shaine",3,81,10,,0.00%
-CPCS,"Navarra, Mark Debby","Decolongon, Karl Jason",2,61,10,,0.00%
-CPCS,"Navarra, Mark Debby","Judicpa, Judegin",1,107,10,,0.00%
-CPCS,"Navarra, Mark Debby","Pajotagana, Champhagne",2,62,10,,0.00%
+CPCS,"Navarra, Mark Debby","Ciasico, Mary April Shaine",8,160,10,,0.00%
+CPCS,"Navarra, Mark Debby","Decolongon, Karl Jason",4,333,10,,0.00%
+CPCS,"Navarra, Mark Debby","Judicpa, Judegin",7,303,8,,14.29%
+CPCS,"Navarra, Mark Debby","Pajotagana, Champhagne",6,204,10,,0.00%
 CPCS,"Navarra, Mark Debby","Sanchez, Roderick",5,427,10,,0.00%
-CPCS,"Navarra, Mark Debby","Tacadao, Janine Marie",3,452,10,,0.00%
+CPCS,"Navarra, Mark Debby","Tacadao, Janine Marie",7,491,10,,0.00%
 CPCS,"Navarra, Mark Debby","Valencia, Jellie Joy",3,522,10,,0.00%
-CPCS,"Sombero, April Marie","Camarino, Mark",3,42,10,,0.00%
-CPCS,"Sombero, April Marie","Sirame, Kevin John",1,758,10,,0.00%
+CPCS,"Sombero, April Marie","Alob, Rheshane Marie",2,876,10,199,0.00%
+CPCS,"Sombero, April Marie","Aragon, Antonio Iii",3,876,10,87,0.00%
+CPCS,"Sombero, April Marie","Camarino, Mark",8,132,10,,0.00%
+CPCS,"Sombero, April Marie","Fernandez, Eljohn",1,2991,10,163,0.00%
+CPCS,"Sombero, April Marie","Sirame, Kevin John",4,989,10,,0.00%
+CPCS,"Sombero, April Marie","Zerrudo, Jeserelle Jason",4,392,10,,0.00%
+,,,,,,,
