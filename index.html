@@ -23,7 +23,7 @@
 
     /* Fixed "Grand Total" footer styling (dark blue) */
     tfoot tr.grand-total-row td{
-      background: #0b2a5b !important;
+      background: #0b2a5b !important;  /* dark blue */
       color: #ffffff !important;
       font-weight: 800;
     }
@@ -39,6 +39,7 @@
       font: 14px/1.2 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       background: #ffffff;
     }
+
     a.right-link:hover{
       background: #f8fafc;
     }
@@ -58,18 +59,38 @@
               As of <span class="intervalAsOf">loading…</span> ET
               <span class="d-block small">(based on last commit time of <code>cpcsAHT.csv</code>)</span>
             </div>
-            <div class="text-muted mt-1">Source: <code>cpcsAHT.csv</code></div>
           </div>
         </div>
 
-        <a class="right-link btn-primary"
-           href="https://cgs-m.github.io/Efficiency-Interval/?lob=cpcs"
-           target="_blank"
-           rel="noopener noreferrer">
+        <a class="right-link btn-primary" href="https://cgs-m.github.io/Efficiency-Interval/?lob=cpcs" target="_blank" rel="noopener noreferrer">
           Efficiency Interval (CPCS)
         </a>
         <div style="clear: both;"></div>
 
+        <!-- TENURE TABLE (ABOVE OVERALL TABLE) -->
+        <hr class="my-3">
+
+        <div class="d-flex flex-wrap align-items-end justify-content-between gap-2">
+          <div>
+            <div class="text-muted mt-1">Source: <code>tenure.csv</code></div>
+          </div>
+        </div>
+
+        <div id="statusTenure" class="alert alert-secondary py-2 px-3 mt-3 mb-3">
+          Loading...
+        </div>
+
+        <div class="table-responsive mb-3">
+          <table id="tblTenure" class="table table-striped table-hover table-bordered w-100"></table>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-end justify-content-between gap-2">
+          <div>
+            <div class="text-muted mt-1">Source: <code>cpcsAHT.csv</code></div>
+          </div>
+        </div>
+
+        <!-- OVERALL TABLE -->
         <div id="statusOverall" class="alert alert-secondary py-2 px-3 mt-3 mb-3">
           Loading...
         </div>
@@ -130,31 +151,29 @@
 
     const THRESHOLD = 420;
 
+    // Tenure table
+    const TENURE_CSV = "tenure.csv";
+    // Set to null to disable highlight for tenure (recommended for your tenure.csv format)
+    const TENURE_HIGHLIGHT_COL_INDEX = null;
+
     // Overall table
     const OVERALL_CSV = "cpcsAHT.csv";
     const OVERALL_COL_INDEX = 2; // 3rd column
 
     // Grand Total detection (Overall table only)
     const GRAND_TOTAL_TEXT = "Grand Total";
-    const GRAND_TOTAL_COL_INDEX = 1; // 2nd column => index 1 (0-based)
+    const GRAND_TOTAL_COL_INDEX = 1; // index 1 (0-based)
 
     // Interval table
     const INTERVAL_CSV = "cpcs.csv";
     const INTERVAL_COL_INDEX = 4; // 5th column
 
-    // "As of" should be based on cpcsAHT.csv (per your request)
+    // "As of" should be based on cpcsAHT.csv
     const ASOF_CSV = OVERALL_CSV;
 
     function toNumber(x) {
       const n = Number(String(x ?? "").replace(/[^0-9.-]/g, ""));
       return Number.isFinite(n) ? n : null;
-    }
-
-    function destroyIfExists(tableSelector) {
-      if ($.fn.DataTable && $.fn.DataTable.isDataTable(tableSelector)) {
-        $(tableSelector).DataTable().destroy();
-        $(tableSelector).empty();
-      }
     }
 
     // Update BOTH “As of …” spans
@@ -193,6 +212,13 @@
       })();
     }
 
+    function destroyIfExists(tableSelector) {
+      if ($.fn.DataTable && $.fn.DataTable.isDataTable(tableSelector)) {
+        $(tableSelector).DataTable().destroy();
+        $(tableSelector).empty(); // clear headers/rows so a clean re-init works
+      }
+    }
+
     function renderCSVTable({ csvFile, tableSelector, statusId, highlightColIndex }) {
       const statusEl = document.getElementById(statusId);
       destroyIfExists(tableSelector);
@@ -203,8 +229,6 @@
         skipEmptyLines: true,
         complete: function(results) {
           const fields = results.meta.fields || [];
-
-          // Basic cleanup (similar to index.txt behavior)
           const cleaned = (results.data || []).filter(r => {
             const vals = fields.map(f => String(r?.[f] ?? "").trim().toLowerCase());
             if (vals.length === 0) return false;
@@ -285,7 +309,7 @@
               if (value !== null && value > THRESHOLD) $(row).addClass("high-red-row");
             }
           });
-        }, 
+        },
         error: function(err) {
           console.error(err);
           statusEl.className = "alert alert-danger py-2 px-3 mt-3 mb-3";
@@ -296,9 +320,19 @@
 
     // Run
     setAsOfFromLastCommit(ASOF_CSV); // commit time from cpcsAHT.csv
+
+    // Tenure (new)
+    renderCSVTable({
+      csvFile: TENURE_CSV,
+      tableSelector: "#tblTenure",
+      statusId: "statusTenure",
+      highlightColIndex: TENURE_HIGHLIGHT_COL_INDEX
+    });
+
+    // Overall
     renderOverallWithFixedGrandTotal();
 
-    // Interval table (NO grouping)
+    // Interval
     renderCSVTable({
       csvFile: INTERVAL_CSV,
       tableSelector: "#tblInterval",
