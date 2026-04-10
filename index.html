@@ -1,536 +1,310 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>CPCS AHT (Overall)</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CPCS AHT Interval Viewer</title>
 
-<style>
-  :root{
-    --bg:#f6f7fb; --card:#fff; --text:#0f172a; --muted:#64748b; --border:#e2e8f0; --header:#0b1220;
-    --primary:#1d4ed8; --primary-weak:rgba(29,78,216,.12);
-    --shadow-soft:0 6px 16px rgba(2,6,23,.06);
-    --row-hover:#f1f5f9; --row-alt:#fbfcff; --sticky:#f8fafc;
-    --good:#16a34a; --bad:#dc2626; --bad-bg:rgba(220,38,38,.08); --good-bg:rgba(22,163,74,.08);
-    --warn:#b45309; --warn-bg:rgba(180,83,9,.10);
-    --danger:#dc2626; --danger-bg:rgba(220,38,38,.10);
-    --total:#0f172a; --total-bg:#f1f5f9;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.4}
-  .page{width:80vw;margin:28px auto;padding:0 18px 28px}
+  <!-- Bootstrap (page styling) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
-  .topbar{
-    background:linear-gradient(180deg, rgba(29,78,216,.10), rgba(29,78,216,0));
-    border:1px solid var(--border); border-radius:16px;
-    padding:18px 18px 14px; box-shadow:var(--shadow-soft);
-  }
-  .title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
-  h1{margin:0;font-size:18px;letter-spacing:.2px;color:var(--header)}
-  .subtitle{margin-top:6px;color:var(--muted);font-size:13px}
+  <!-- DataTables + Bootstrap theme -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.min.css">
 
-  .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.7);font-size:12px;color:var(--muted);white-space:nowrap}
-  .dot{width:9px;height:9px;border-radius:999px;background:var(--primary);box-shadow:0 0 0 4px var(--primary-weak)}
+  <style>
+    body { background: #f7f8fa; }
+    code { background:#f1f3f5; padding: 2px 6px; border-radius: 4px; }
 
-  .controls{margin-top:14px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-  .left-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  .search{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.9);min-width:340px}
-  .search label{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.2px}
-  .search input{flex:1;border:none;outline:none;font-size:13px;background:transparent;color:var(--text);min-width:160px}
-  .search:focus-within{border-color:rgba(29,78,216,.45);box-shadow:0 0 0 4px rgba(29,78,216,.12)}
+    /* Light red highlight for the entire row */
+    .high-red-row td { background-color: #fde2e1 !important; }
 
-  .btn{border:1px solid var(--border);background:#fff;padding:10px 12px;border-radius:12px;cursor:pointer;font-size:13px;color:var(--text);box-shadow:0 1px 0 rgba(2,6,23,.02)}
-  .btn:hover{background:#f8fafc}
-  .btn:active{transform:translateY(1px)}
-  .btn-primary{border-color:rgba(29,78,216,.35);background:rgba(29,78,216,.10);color:#0b2f9b}
-  .btn-primary:hover{background:rgba(29,78,216,.14)}
+    /* Keep tables from looking cramped when wide */
+    table.dataTable tbody td { vertical-align: middle; }
 
-  .right-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-  .stat{padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.9);color:var(--muted);font-size:12px;white-space:nowrap}
-  .stat b{color:var(--text);font-weight:700}
+    /* Fixed "Grand Total" footer styling (dark blue) */
+    tfoot tr.grand-total-row td{
+      background: #0b2a5b !important;
+      color: #ffffff !important;
+      font-weight: 800;
+    }
 
-  .alert{
-    margin-top:12px;
-    padding:10px 12px;
-    border-radius:12px;
-    border:1px solid var(--border);
-    background:#fff;
-    color:var(--muted);
-    font-size:12px;
-  }
-  .alert.ok{border-color:rgba(22,163,74,.25); background:var(--good-bg); color:#14532d;}
-  .alert.bad{border-color:rgba(220,38,38,.25); background:var(--danger-bg); color:#7f1d1d;}
-  .alert.warn{border-color:rgba(180,83,9,.25); background:var(--warn-bg); color:#7c2d12;}
-
-  .table-card{margin-top:14px;background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-soft);overflow:hidden}
-  .table-wrap{overflow:auto;max-height:74vh}
-  table{border-collapse:separate;border-spacing:0;width:100%;min-width:1100px}
-
-  thead th{
-    position:sticky;top:0;z-index:5;background:var(--sticky);
-    border-bottom:1px solid var(--border);
-    font-size:12px;color:#0b1220;text-align:left;padding:12px 12px;white-space:nowrap;letter-spacing:.15px
-  }
-  tbody td{
-    border-bottom:1px solid var(--border);
-    padding:10px 12px;
-    font-size:13px;
-    white-space:nowrap;
-    vertical-align:middle;
-    color:#0f172a
-  }
-  tbody tr:nth-child(even){background:var(--row-alt)}
-  tbody tr:hover{background:var(--row-hover)}
-
-  /* section header rows (collapsible) */
-  tr.parent{background:#fff !important;font-weight:800}
-  tr.parent td{border-bottom:1px solid rgba(226,232,240,.9)}
-  td.section-toggle{cursor:pointer;user-select:none}
-  .section-cell{display:flex;align-items:center;gap:10px}
-  .chev{
-    width:18px;height:18px;border-radius:8px;border:1px solid var(--border);
-    display:inline-flex;align-items:center;justify-content:center;background:#fff;color:#0f172a;font-size:11px;flex:0 0 auto
-  }
-  tr.parent[aria-expanded="true"] .chev::before{content:"▼"}
-  tr.parent[aria-expanded="false"] .chev::before{content:"▶"}
-
-  tr.child.hidden{display:none}
-  tr.filtered-out{display:none !important}
-
-  .num{text-align:right;font-variant-numeric:tabular-nums;color:#0b1220}
-  .muted{color:var(--muted)}
-  .total-row td{background:var(--total-bg) !important; font-weight:800; color:var(--total);}
-  .grand-total td{
-    position:sticky; bottom:0; z-index:4;
-    background:#0b2a5b !important; color:#fff !important;
-    font-weight:900;
-    border-top:2px solid rgba(255,255,255,.25);
-  }
-
-  /* AHT threshold highlight */
-  .aht-bad td{ background: rgba(220,38,38,.10) !important; }
-
-  thead th:first-child{border-top-left-radius:16px}
-  thead th:last-child{border-top-right-radius:16px}
-</style>
+    a.right-link{
+      float: right;
+      display: inline-block;
+      margin: -30px 0 0 0;
+      font-style: italic;
+      padding: 10px 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      font: 14px/1.2 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: #ffffff;
+    }
+    a.right-link:hover{
+      background: #f8fafc;
+    }
+  </style>
 </head>
-
 <body>
-<div class="page">
-  <div class="topbar">
-    <div class="title-row">
-      <div>
-        <h1>CPCS AHT (Overall)</h1>
-        <div class="subtitle">As of <span id="reportStamp">Loading…</span> ET</div>
-      </div>
-      <div class="pill" title="Data source loaded from cpcsAHT.csv">
-        <span class="dot"></span>
-        <span>Source: <b>cpcsAHT.csv</b></span>
-      </div>
-    </div>
 
-    <div class="controls">
-      <div class="left-controls">
-        <div class="search" title="Filter by AM name">
-          <label for="amSearch">AM</label>
-          <input id="amSearch" type="text" placeholder="Search (e.g., Molina, Navarra...)" />
-          <button id="clearSearch" class="btn" type="button">Clear</button>
+  <div class="container py-4">
+
+    <!-- TOP CARD / TABLE -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <div class="d-flex flex-wrap align-items-end justify-content-between gap-2">
+          <div>
+            <h1 class="h4 mb-1">CPCS AHT (Overall)</h1>
+            <div class="text-muted">
+              As of <span class="intervalAsOf">loading…</span> ET
+              <span class="d-block small">(based on last commit time of <code>cpcsAHT.csv</code>)</span>
+            </div>
+            <div class="text-muted mt-1">Source: <code>cpcsAHT.csv</code></div>
+          </div>
         </div>
 
-        <button id="expandAll" class="btn btn-primary" type="button">Expand all</button>
-        <button id="collapseAll" class="btn" type="button">Collapse all</button>
-      </div>
+        <a class="right-link btn-primary"
+           href="https://cgs-m.github.io/Efficiency-Interval/?lob=cpcs"
+           target="_blank"
+           rel="noopener noreferrer">
+          Efficiency Interval (CPCS)
+        </a>
+        <div style="clear: both;"></div>
 
-      <div class="right-controls">
-        <div class="stat"><b id="rowShown">0</b> / <b id="rowTotal">0</b> rows shown</div>
+        <div id="statusOverall" class="alert alert-secondary py-2 px-3 mt-3 mb-3">
+          Loading...
+        </div>
+
+        <div class="table-responsive">
+          <table id="tblOverall" class="table table-striped table-hover table-bordered w-100">
+            <tfoot></tfoot>
+          </table>
+        </div>
       </div>
     </div>
 
-    <div id="status" class="alert">Loading…</div>
-  </div>
+    <!-- SECOND CARD / TABLE -->
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="d-flex flex-wrap align-items-end justify-content-between gap-2">
+          <div>
+            <h2 class="h5 mb-1">CPCS AHT Interval</h2>
+            <div class="text-muted">
+              As of <span class="intervalAsOf">loading…</span> ET
+              <span class="d-block small">(based on last commit time of <code>cpcsAHT.csv</code>)</span>
+            </div>
+            <div class="text-muted mt-1">Source: <code>cpcs.csv</code></div>
+          </div>
+        </div>
 
-  <div class="table-card">
-    <div class="table-wrap">
-      <table id="tbl">
-        <thead></thead>
-        <tbody></tbody>
-      </table>
+        <div id="statusInterval" class="alert alert-secondary py-2 px-3 mt-3 mb-3">
+          Loading...
+        </div>
+
+        <div class="table-responsive">
+          <table id="tblInterval" class="table table-striped table-hover table-bordered w-100"></table>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-muted small mt-3">
+      Tip: Use the search box above each table to filter results; click a column header to sort.
     </div>
   </div>
-</div>
 
-<script>
-  /* ===== Repo settings (for "As of" stamp) ===== */
-  const OWNER = "cbandoy";
-  const REPO  = "CPCSAHTinterval";
-  const BRANCH = "main";
-  const CSV_PATH = "cpcsAHT.csv";
+  <!-- jQuery (for DataTables integration) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-  const AHT_THRESHOLD = 420;
+  <!-- DataTables core + Bootstrap adapter -->
+  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.min.js"></script>
 
-  function formatDateLong(d){ return d.toLocaleDateString("en-US", {timeZone:"America/New_York", year:"numeric",month:"long",day:"2-digit"}); }
-  function formatTimeOnly(d){ return d.toLocaleTimeString("en-US", {timeZone:"America/New_York", hour:"numeric",minute:"2-digit"}); }
+  <!-- Papa Parse (CSV parser) -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
-  async function getCsvCommitTimestamp(){
-    const params = new URLSearchParams({ path: CSV_PATH, per_page: "1", sha: BRANCH });
-    const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/commits?` + params.toString();
-    const res = await fetch(apiUrl, { cache:"no-store", headers:{ "Accept":"application/vnd.github+json" }});
-    if(!res.ok) throw new Error(`GitHub commits API failed (${res.status}).`);
-    const commits = await res.json();
-    const iso = commits?.[0]?.commit?.committer?.date || commits?.[0]?.commit?.author?.date;
-    if(!iso) throw new Error("Commit date missing.");
-    return new Date(iso);
-  }
+  <script>
+    /************* SET THESE *************/
+    const OWNER = "cbandoy";
+    const REPO  = "CPCSAHTinterval";
+    const BRANCH = "main";
+    /************************************/
 
-  async function setSubtitleStampFromCsvCommit(){
-    const el = document.getElementById("reportStamp");
-    try{
-      const d = await getCsvCommitTimestamp();
-      el.textContent = `${formatDateLong(d)} — as of ${formatTimeOnly(d)}`;
-    }catch(e){
-      console.warn(e);
-      const now = new Date();
-      el.textContent = `${formatDateLong(now)} — as of ${formatTimeOnly(now)}`;
-    }
-  }
+    const THRESHOLD = 420;
 
-  /* ===== Parse whitespace/tab or comma ===== */
-  function detectDelimiter(text){
-    const firstLine = (text.split(/\r?\n/).find(l => l.trim() !== "") || "");
-    const commaCount = (firstLine.match(/,/g) || []).length;
-    const tabCount = (firstLine.match(/\t/g) || []).length;
-    if(tabCount > commaCount) return "\t";
-    // If neither tab nor comma is strong, treat as whitespace columns (fallback)
-    return commaCount > 0 ? "," : null;
-  }
+    // Overall table
+    const OVERALL_CSV = "cpcsAHT.csv";
+    const OVERALL_COL_INDEX = 2; // 3rd column
 
-  // Splits a line by:
-  // - delimiter if provided (tab or comma)
-  // - otherwise by 2+ spaces OR tab (handles "pretty printed" whitespace)
-  function splitLine(line, delim){
-    if(delim === "," || delim === "\t"){
-      return line.split(delim).map(c => c.trim());
-    }
-    return line.trim().split(/\t+|\s{2,}/g).map(c => c.trim());
-  }
+    // Grand Total detection (Overall table only)
+    const GRAND_TOTAL_TEXT = "Grand Total";
+    const GRAND_TOTAL_COL_INDEX = 1; // 2nd column => index 1 (0-based)
 
-  function parseDelimited(text){
-    const delim = detectDelimiter(text);
-    const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
-    return lines.map(line => splitLine(line, delim));
-  }
+    // Interval table
+    const INTERVAL_CSV = "cpcs.csv";
+    const INTERVAL_COL_INDEX = 4; // 5th column
 
-  function cleanCell(v){
-    const s = String(v ?? "").trim();
-    if(s.toLowerCase() === "nan") return "";
-    if(s === "--") return "";
-    return s;
-  }
+    // "As of" should be based on cpcsAHT.csv (per your request)
+    const ASOF_CSV = OVERALL_CSV;
 
-  function toNumber(v){
-    const s = cleanCell(v);
-    if(s === "") return null;
-    const n = Number(s.replace(/[^0-9.-]/g, ""));
-    return Number.isFinite(n) ? n : null;
-  }
-
-  function fmtInt(v){
-    const n = toNumber(v);
-    return n === null ? "" : new Intl.NumberFormat("en-US", { maximumFractionDigits:0 }).format(n);
-  }
-
-  function fmtPct(v){
-    const n = toNumber(v);
-    return n === null ? "" : n.toFixed(2) + "%";
-  }
-
-  function isTotalTenureLabel(t){
-    const s = String(t ?? "").trim().toLowerCase();
-    return s.endsWith(" total");
-  }
-  function isGrandTotalRow(row){
-    return String(row?.[0] ?? "").trim().toLowerCase() === "grand total";
-  }
-  function groupKeyFromTenure(t){
-    const s = String(t ?? "").trim();
-    if(s.startsWith("<90")) return "<90";
-    if(s.startsWith(">90")) return ">90";
-    return s || "(blank)";
-  }
-
-  /* ===== Render table with collapsible sections ===== */
-  const state = {
-    collapsed: { "<90": false, ">90": false },
-    sections: ["<90", ">90"],
-    header: [],
-    rows: [],         // data rows excluding header and excluding grand total
-    grandTotal: null, // single row array
-  };
-
-  function buildTableHead(headers){
-    const thead = document.querySelector("#tbl thead");
-    thead.innerHTML = "";
-    const tr = document.createElement("tr");
-    headers.forEach((h, idx) => {
-      const th = document.createElement("th");
-      th.textContent = h;
-      if(idx >= 2) th.classList.add("num");
-      tr.appendChild(th);
-    });
-    thead.appendChild(tr);
-  }
-
-  function buildSectionHeaderRow(sectionName, counts){
-    const tr = document.createElement("tr");
-    tr.className = "parent";
-    tr.setAttribute("data-section", sectionName);
-    tr.setAttribute("aria-expanded", state.collapsed[sectionName] ? "false" : "true");
-
-    const td = document.createElement("td");
-    td.colSpan = state.header.length;
-    td.className = "section-toggle";
-    td.tabIndex = 0;
-
-    const wrap = document.createElement("div");
-    wrap.className = "section-cell";
-
-    const chev = document.createElement("span");
-    chev.className = "chev";
-
-    const title = document.createElement("div");
-    title.innerHTML = `<b>${sectionName}</b> <span class="muted">(${counts} row(s))</span>`;
-
-    wrap.appendChild(chev);
-    wrap.appendChild(title);
-    td.appendChild(wrap);
-    tr.appendChild(td);
-
-    td.addEventListener("click", () => toggleSection(sectionName));
-    td.addEventListener("keydown", (e) => {
-      if(e.key === "Enter" || e.key === " "){
-        e.preventDefault();
-        toggleSection(sectionName);
-      }
-    });
-
-    return tr;
-  }
-
-  function buildDataRow(row, isChild, sectionName){
-    const tr = document.createElement("tr");
-    tr.classList.add(isChild ? "child" : "child");
-    tr.setAttribute("data-section", sectionName);
-
-    // Hide if collapsed (except Total rows)
-    const totalRow = isTotalTenureLabel(row[0]);
-    if(state.collapsed[sectionName] && !totalRow) tr.classList.add("hidden");
-
-    // Total styling
-    if(totalRow) tr.classList.add("total-row");
-
-    // AHT threshold highlight (AHT seconds is column index 3)
-    const aht = toNumber(row[3]);
-    if(aht !== null && aht > AHT_THRESHOLD) tr.classList.add("aht-bad");
-
-    // Build cells with formatting
-    row.forEach((cell, idx) => {
-      const td = document.createElement("td");
-
-      // Format by column name if we have it
-      const colName = state.header[idx] || "";
-
-      let out = cleanCell(cell);
-
-      // Column-based formatting
-      if(idx === 2 || idx === 3 || idx === 4 || idx === 5){ // numeric ints
-        out = fmtInt(out);
-        td.classList.add("num");
-      } else if(colName.includes("%")) {
-        out = fmtPct(out);
-        td.classList.add("num");
-      } else if(idx >= 2) {
-        td.classList.add("num");
-      }
-
-      td.textContent = out;
-      tr.appendChild(td);
-    });
-
-    return tr;
-  }
-
-  function buildGrandTotalRow(row){
-    const tr = document.createElement("tr");
-    tr.className = "grand-total";
-    row.forEach((cell, idx) => {
-      const td = document.createElement("td");
-      let out = cleanCell(cell);
-      const colName = state.header[idx] || "";
-
-      if(idx === 2 || idx === 3 || idx === 4 || idx === 5){
-        out = fmtInt(out);
-        td.classList.add("num");
-      } else if(colName.includes("%")) {
-        out = fmtPct(out);
-        td.classList.add("num");
-      } else if(idx >= 2) {
-        td.classList.add("num");
-      }
-
-      td.textContent = out;
-      tr.appendChild(td);
-    });
-    return tr;
-  }
-
-  function renderBody(){
-    const tbody = document.querySelector("#tbl tbody");
-    tbody.innerHTML = "";
-
-    // count per section
-    const bySection = {};
-    for(const s of state.sections) bySection[s] = 0;
-    for(const r of state.rows){
-      const s = groupKeyFromTenure(r[0]);
-      if(bySection[s] != null) bySection[s]++;
+    function toNumber(x) {
+      const n = Number(String(x ?? "").replace(/[^0-9.-]/g, ""));
+      return Number.isFinite(n) ? n : null;
     }
 
-    // Render sections in fixed order
-    for(const sectionName of state.sections){
-      tbody.appendChild(buildSectionHeaderRow(sectionName, bySection[sectionName]));
-
-      // render rows belonging to section
-      for(const row of state.rows){
-        const s = groupKeyFromTenure(row[0]);
-        if(s !== sectionName) continue;
-        tbody.appendChild(buildDataRow(row, true, sectionName));
+    function destroyIfExists(tableSelector) {
+      if ($.fn.DataTable && $.fn.DataTable.isDataTable(tableSelector)) {
+        $(tableSelector).DataTable().destroy();
+        $(tableSelector).empty();
       }
     }
 
-    // Grand total pinned
-    if(state.grandTotal){
-      tbody.appendChild(buildGrandTotalRow(state.grandTotal));
+    // Update BOTH “As of …” spans
+    function setAsOfFromLastCommit(filename) {
+      const els = document.querySelectorAll(".intervalAsOf");
+      const setAll = (txt) => els.forEach(el => el.textContent = txt);
+
+      (async () => {
+        try {
+          const api = `https://api.github.com/repos/${OWNER}/${REPO}/commits?path=${encodeURIComponent(filename)}&per_page=1&sha=${encodeURIComponent(BRANCH)}`;
+          const res = await fetch(api, { headers: { "Accept": "application/vnd.github+json" } });
+
+          if (!res.ok) {
+            const body = await res.text();
+            throw new Error(`GitHub API HTTP ${res.status}: ${body.slice(0, 160)}`);
+          }
+
+          const commits = await res.json();
+          const iso = commits?.[0]?.commit?.committer?.date || commits?.[0]?.commit?.author?.date;
+          if (!iso) throw new Error("No commit date found for this file.");
+
+          const formatted = new Intl.DateTimeFormat("en-US", {
+            timeZone: "America/New_York",
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+            hour: "numeric",
+            minute: "2-digit"
+          }).format(new Date(iso));
+
+          setAll(formatted);
+        } catch (e) {
+          console.error(e);
+          setAll("unable to fetch time");
+        }
+      })();
     }
 
-    applySearchFilter(); // keep search applied
-    updateCounts();
-  }
+    function renderCSVTable({ csvFile, tableSelector, statusId, highlightColIndex }) {
+      const statusEl = document.getElementById(statusId);
+      destroyIfExists(tableSelector);
 
-  function toggleSection(sectionName){
-    state.collapsed[sectionName] = !state.collapsed[sectionName];
+      Papa.parse(csvFile + "?v=" + Date.now(), {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          const fields = results.meta.fields || [];
 
-    const parent = document.querySelector(`tr.parent[data-section="${CSS.escape(sectionName)}"]`);
-    if(parent) parent.setAttribute("aria-expanded", state.collapsed[sectionName] ? "false" : "true");
+          // Basic cleanup (similar to index.txt behavior)
+          const cleaned = (results.data || []).filter(r => {
+            const vals = fields.map(f => String(r?.[f] ?? "").trim().toLowerCase());
+            if (vals.length === 0) return false;
+            if (vals.every(v => v === "")) return false;
+            if (vals.every(v => v === "nan")) return false;
+            return true;
+          });
 
-    const rows = document.querySelectorAll(`tr.child[data-section="${CSS.escape(sectionName)}"]`);
-    rows.forEach(tr => {
-      const tenureCell = tr.querySelector("td")?.textContent || "";
-      const isTotal = tenureCell.toLowerCase().endsWith(" total");
-      if(state.collapsed[sectionName] && !isTotal) tr.classList.add("hidden");
-      else tr.classList.remove("hidden");
-    });
+          const columns = fields.map(name => ({ title: name, data: name }));
 
-    updateCounts();
-  }
+          statusEl.className = "alert alert-success py-2 px-3 mt-3 mb-3";
+          statusEl.textContent = `Loaded ${cleaned.length} row(s) from ${csvFile}.`;
 
-  function setAllSections(collapsed){
-    for(const s of state.sections){
-      state.collapsed[s] = collapsed;
-      const parent = document.querySelector(`tr.parent[data-section="${CSS.escape(s)}"]`);
-      if(parent) parent.setAttribute("aria-expanded", collapsed ? "false" : "true");
-
-      const rows = document.querySelectorAll(`tr.child[data-section="${CSS.escape(s)}"]`);
-      rows.forEach(tr => {
-        const tenureCell = tr.querySelector("td")?.textContent || "";
-        const isTotal = tenureCell.toLowerCase().endsWith(" total");
-        if(collapsed && !isTotal) tr.classList.add("hidden");
-        else tr.classList.remove("hidden");
+          new DataTable(tableSelector, {
+            data: cleaned,
+            columns,
+            pageLength: 25,
+            scrollX: true,
+            createdRow: function(row, rowData) {
+              if (highlightColIndex === null || highlightColIndex === undefined) return;
+              const colName = fields[highlightColIndex];
+              const value = toNumber(rowData[colName]);
+              if (value !== null && value > THRESHOLD) $(row).addClass("high-red-row");
+            }
+          });
+        },
+        error: function(err) {
+          console.error(err);
+          statusEl.className = "alert alert-danger py-2 px-3 mt-3 mb-3";
+          statusEl.textContent = `Failed to load ${csvFile}: ${err.message || err}`;
+        }
       });
     }
-    updateCounts();
-  }
 
-  function updateCounts(){
-    const allDataRows = document.querySelectorAll("#tbl tbody tr.child");
-    const visibleDataRows = Array.from(allDataRows).filter(tr =>
-      !tr.classList.contains("hidden") && !tr.classList.contains("filtered-out")
-    );
-    document.getElementById("rowTotal").textContent = String(allDataRows.length);
-    document.getElementById("rowShown").textContent = String(visibleDataRows.length);
-  }
+    // Overall renderer: keep Grand Total as fixed footer
+    function renderOverallWithFixedGrandTotal() {
+      const statusEl = document.getElementById("statusOverall");
+      const tableEl = document.querySelector("#tblOverall");
+      const tfootEl = tableEl.querySelector("tfoot");
 
-  function applySearchFilter(){
-    const q = (document.getElementById("amSearch").value || "").trim().toLowerCase();
+      destroyIfExists("#tblOverall");
+      tfootEl.innerHTML = "";
 
-    const dataRows = document.querySelectorAll("#tbl tbody tr.child");
-    dataRows.forEach(tr => {
-      // AM is column index 1
-      const tds = tr.querySelectorAll("td");
-      const am = (tds[1]?.textContent || "").toLowerCase();
+      Papa.parse(OVERALL_CSV + "?v=" + Date.now(), {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          const allRows = results.data || [];
+          const fields = results.meta.fields || [];
+          const columns = fields.map(name => ({ title: name, data: name }));
 
-      const match = q === "" || am.includes(q);
+          const gtFieldName = fields[GRAND_TOTAL_COL_INDEX];
+          const isGrandTotal = (r) =>
+            String(r?.[gtFieldName] ?? "").trim().toLowerCase() === GRAND_TOTAL_TEXT.toLowerCase();
 
-      if(match) tr.classList.remove("filtered-out");
-      else tr.classList.add("filtered-out");
-    });
+          const grandTotalRow = allRows.find(isGrandTotal);
+          const data = allRows.filter(r => !isGrandTotal(r));
 
-    updateCounts();
-  }
+          if (grandTotalRow) {
+            const tds = fields.map(f => `<td>${(grandTotalRow[f] ?? "").toString()}</td>`).join("");
+            tfootEl.innerHTML = `<tr class="grand-total-row">${tds}</tr>`;
+          }
 
-  async function loadCpcsAht(){
-    const status = document.getElementById("status");
-    status.className = "alert";
-    status.textContent = "Loading cpcsAHT.csv…";
+          statusEl.className = "alert alert-success py-2 px-3 mt-3 mb-3";
+          statusEl.textContent =
+            `Loaded ${data.length} row(s) from ${OVERALL_CSV}.` +
+            (grandTotalRow ? " (Grand Total fixed.)" : " (No Grand Total row found.)");
 
-    try{
-      const res = await fetch("./" + CSV_PATH + "?v=" + Date.now(), { cache:"no-store" });
-      if(!res.ok) throw new Error("HTTP " + res.status);
-
-      const text = await res.text();
-      const grid = parseDelimited(text);
-
-      if(grid.length < 2){
-        status.className = "alert warn";
-        status.textContent = "No rows found in cpcsAHT.csv.";
-        return;
-      }
-
-      // header
-      const header = grid[0].map(cleanCell);
-      state.header = header;
-
-      // rows
-      const rawRows = grid.slice(1).map(r => header.map((_, i) => cleanCell(r[i] ?? "")));
-
-      // grand total extraction
-      state.grandTotal = rawRows.find(isGrandTotalRow) || null;
-      state.rows = rawRows.filter(r => !isGrandTotalRow(r));
-
-      buildTableHead(state.header);
-      renderBody();
-
-      status.className = "alert ok";
-      status.textContent = `Loaded ${state.rows.length} row(s) + ${state.grandTotal ? "Grand Total" : "no Grand Total"} from cpcsAHT.csv.`;
-    } catch(e){
-      console.error(e);
-      status.className = "alert bad";
-      status.textContent = "Failed to load cpcsAHT.csv: " + (e?.message || e);
+          new DataTable("#tblOverall", {
+            data,
+            columns,
+            pageLength: 25,
+            scrollX: true,
+            createdRow: function(row, rowData) {
+              const colName = fields[OVERALL_COL_INDEX];
+              const value = toNumber(rowData[colName]);
+              if (value !== null && value > THRESHOLD) $(row).addClass("high-red-row");
+            }
+          });
+        },
+        error: function(err) {
+          console.error(err);
+          statusEl.className = "alert alert-danger py-2 px-3 mt-3 mb-3";
+          statusEl.textContent = `Failed to load ${OVERALL_CSV}: ${err.message || err}`;
+        }
+      });
     }
-  }
 
-  // wire controls
-  document.getElementById("clearSearch").addEventListener("click", () => {
-    document.getElementById("amSearch").value = "";
-    applySearchFilter();
-  });
-  document.getElementById("amSearch").addEventListener("input", applySearchFilter);
+    // Run
+    setAsOfFromLastCommit(ASOF_CSV); // commit time from cpcsAHT.csv
+    renderOverallWithFixedGrandTotal();
 
-  document.getElementById("expandAll").addEventListener("click", () => setAllSections(false));
-  document.getElementById("collapseAll").addEventListener("click", () => setAllSections(true));
-
-  // start
-  setSubtitleStampFromCsvCommit();
-  loadCpcsAht();
-</script>
+    // Interval table (NO grouping)
+    renderCSVTable({
+      csvFile: INTERVAL_CSV,
+      tableSelector: "#tblInterval",
+      statusId: "statusInterval",
+      highlightColIndex: INTERVAL_COL_INDEX
+    });
+  </script>
 </body>
 </html>
