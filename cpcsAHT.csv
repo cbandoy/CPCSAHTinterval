@@ -1,4 +1,4 @@
 LOB,Supervisor,Handled Calls ,AHT seconds,ACW Ave,Hold Ave,Transfer rate%,Occupancy%
-CPCS,"Molina, Schubert Jr",228,423,9,25,2.63%,55.70%
-CPCS,"Navarra, Mark Debby",337,386,8,118,0.89%,49.42%
-CPCS,Grand Total,565,401,8,29,1.59%,51.92%
+CPCS,"Molina, Schubert Jr",13,341,8,--,0.00%,24.59%
+CPCS,"Navarra, Mark Debby",31,340,6,--,0.00%,23.40%
+CPCS,Grand Total,44,340,7,--,0.00%,23.74%
