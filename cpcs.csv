@@ -1,4 +1,4 @@
-﻿LOB,Supervisor,Name ,Handled Calls ,AHT seconds,ACW Ave,Hold Ave,Transfer rate%,
+﻿LOB,Supervisor,Name,Handled,AHT,ACW Ave,Hold Ave,Transfer Rate%,Occupancy%
 CPCS,"Molina, Schubert Jr","Alob, Rheshane Marie",20,638,6,69,0.00%,68.96%
 CPCS,"Molina, Schubert Jr","Caldera, Ann Khrysta",34,325,9,1,5.88%,51.21%
 CPCS,"Molina, Schubert Jr","Capillas, Renalyn",33,300,8,9,6.06%,45.14%
