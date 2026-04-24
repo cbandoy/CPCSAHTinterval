@@ -1,26 +1,25 @@
-﻿LOB,Supervisor,Name,Handled,AHT,ACW Ave,Hold Ave,Transfer Rate%,Occupancy%
-CPCS,"Molina, Schubert Jr","Alob, Rheshane Marie",16,324,3,80,0.00%,48.61%
-CPCS,"Molina, Schubert Jr","Cabangal, Ariel",1,334,3,,0.00%,81.06%
-CPCS,"Molina, Schubert Jr","Caldera, Ann Khrysta",28,276,9,1,7.14%,44.37%
-CPCS,"Molina, Schubert Jr","Capillas, Renalyn",21,355,9,,0.00%,46.52%
-CPCS,"Molina, Schubert Jr","Gador, George II",20,266,9,1,10.00%,43.12%
-CPCS,"Molina, Schubert Jr","Galvez, Christian",21,378,10,,0.00%,53.14%
-CPCS,"Molina, Schubert Jr","Laguda, Jason",1,274,5,,0.00%,100.00%
-CPCS,"Molina, Schubert Jr","Sirame, Kevin John",18,462,9,,0.00%,61.17%
-CPCS,"Molina, Schubert Jr","Surles, Jinky",23,306,10,,0.00%,44.15%
-CPCS,"Molina, Schubert Jr","Taleon, Gerald",14,365,10,13,0.00%,49.05%
-CPCS,"Molina, Schubert Jr","Zerrudo, Jeserelle Jason",16,482,10,79,0.00%,60.81%
-CPCS,"Navarra, Mark Debby","Aragon, Antonio Iii",15,319,10,,0.00%,46.26%
-CPCS,"Navarra, Mark Debby","Balcena, Riesel Liberty Rose",20,282,10,,0.00%,36.58%
-CPCS,"Navarra, Mark Debby","Baumbad, Joshua",21,487,4,,0.00%,63.25%
-CPCS,"Navarra, Mark Debby","Camarino, Mark",27,319,9,109,3.70%,54.90%
-CPCS,"Navarra, Mark Debby","Ciasico, Mary April Shaine",28,302,6,,3.57%,43.63%
-CPCS,"Navarra, Mark Debby","Decolongon, Karl Jason",19,295,9,,0.00%,44.32%
-CPCS,"Navarra, Mark Debby","Fernandez, Eljohn",13,612,5,,0.00%,63.72%
-CPCS,"Navarra, Mark Debby","Jordan, Mary Beth",24,355,10,,0.00%,60.95%
-CPCS,"Navarra, Mark Debby","Judicpa, Judegin",19,296,9,,0.00%,32.36%
-CPCS,"Navarra, Mark Debby","Macero, Reynan",15,500,4,,0.00%,59.39%
-CPCS,"Navarra, Mark Debby","Noblezada, Chriz Vincent",19,218,9,,0.00%,29.42%
-CPCS,"Navarra, Mark Debby","Pajotagana, Champhagne",22,330,6,,0.00%,47.07%
-CPCS,"Navarra, Mark Debby","Sanchez, Roderick",25,377,9,,4.00%,50.64%
-,"Navarra, Mark Debby","Valencia, Jellie Joy",24,432,7,,0.00%,54.31%
+﻿LOB,Supervisor,Name ,Handled Calls ,AHT seconds,ACW Ave,Hold Ave,Transfer rate%,
+CPCS,"Molina, Schubert Jr",210,347,9,18,1.90%,47.95%,
+CPCS,"Navarra, Mark Debby",345,347,8,109,0.87%,47.52%,
+CPCS,Grand Total,555,347,8,26,1.26%,47.68%,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
